@@ -23,12 +23,12 @@ const __dirname = path.dirname(__filename);
 // CORS configuration: add all frontend URLs here
 const allowedOrigins = [
   'http://localhost:5173',                 // local dev frontend
-   'https://myblog-qokl.onrender.com' // deployed frontend on Render
+  'https://myblog-qokl.onrender.com'      // deployed frontend on Render
 ];
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (e.g., Postman, curl)
+    // Allow requests with no origin (like Postman, curl)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -40,6 +40,8 @@ app.use(cors({
 
 // Middleware
 app.use(express.json());
+
+// Serve uploads folder statically if you use file uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health check endpoint
