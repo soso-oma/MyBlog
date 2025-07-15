@@ -94,7 +94,7 @@ const Home = () => {
   };
 
   return (
-    <div className="p-4 max-w-full md:max-w-4xl mx-auto relative">
+    <div className="px-2 sm:px-4 max-w-full md:max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">📚 Recent Posts</h1>
 
       {posts.map((post) => {
@@ -111,7 +111,7 @@ const Home = () => {
         return (
           <div
             key={post._id}
-            className="mb-6 p-4 border rounded-lg bg-white shadow-sm w-full"
+            className="mb-3 p-2 border rounded-lg bg-white shadow-sm w-full"
           >
             {/* Post title links to details */}
             <Link to={`/post/${post.slug}`}>
@@ -170,7 +170,7 @@ const Home = () => {
 
             {/* Post image */}
             {post.image && (
-              <div className="my-4 w-full overflow-hidden rounded-md bg-gray-100">
+              <div className="my-3 w-full overflow-hidden rounded-md bg-gray-100">
                 <img
                   src={
                     post.image.startsWith('http')
