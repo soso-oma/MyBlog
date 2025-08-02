@@ -14,10 +14,9 @@ const PostDetails = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
 
-  // I grab the current user and token from the AuthContext for auth checks and requests
   const { user, token } = useContext(AuthContext);
 
-  // I use state to hold the post, comments, and various UI states like loading, reply inputs, etc.
+  // Using state to hold the post, comments, and various UI states like loading, reply inputs, etc.
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
@@ -26,21 +25,19 @@ const PostDetails = () => {
   const [showPostOptions, setShowPostOptions] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // When the component loads or the slug changes, I fetch the post and its comments
+  // Fetching the post and its comments when the component loads or the slug changes.
   useEffect(() => {
     const fetchPostAndComments = async () => {
       try {
-        // First I get the post details by slug
         const res = await getPostBySlug(slug);
         setPost(res.data);
 
-        // Then I get all comments related to this post
         const commentsRes = await getComments(res.data._id);
         setComments(commentsRes.data);
       } catch (err) {
         console.error('Failed to fetch post or comments', err);
       } finally {
-        // After fetching, I set loading to false no matter what
+
         setLoading(false);
       }
     };
@@ -48,15 +45,13 @@ const PostDetails = () => {
     fetchPostAndComments();
   }, [slug]);
 
-  // I let the post owner delete the post, but only after confirmation
   const handleDeletePost = async () => {
     if (!window.confirm('Are you sure you want to delete this post?')) return;
 
     try {
-      // I send a delete request with the token for authorization
       await deletePost(post._id, token);
       alert('Post deleted');
-      // Then I redirect to the homepage
+    
       navigate('/');
     } catch (err) {
       console.error('Delete failed:', err);
@@ -64,20 +59,16 @@ const PostDetails = () => {
     }
   };
 
-  // This handles submitting a new top-level comment
+  // Submitting a new top-level comment
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     const text = newComment.trim();
 
-    // If input is empty or post isn't loaded yet, I just exit
     if (!text || !post?._id) return;
 
     try {
-      // I create the comment, passing post ID and content, authorized by token
       const res = await createComment({ postId: post._id, content: text }, token);
-      // I add the new comment to the existing comments state
       setComments((prev) => [...prev, res.data]);
-      // Clear the input box
       setNewComment('');
     } catch (err) {
       console.error('Comment failed:', err);
@@ -93,13 +84,13 @@ const PostDetails = () => {
     if (!text || !post?._id) return;
 
     try {
-      // I create a comment with a parent property to nest it as a reply
+      // Creating a comment with a parent property to nest it as a reply
       const res = await createComment({ postId: post._id, content: text, parent: parentId }, token);
-      // Add the reply to comments state
+      // Adding the reply to comments state
       setComments((prev) => [...prev, res.data]);
-      // Clear the reply input for that comment
+      // Clearing the reply input for that comment
       setReplyInputs((prev) => ({ ...prev, [parentId]: '' }));
-      // Hide the reply form after submitting
+      // Hiding the reply form after submitting
       setReplyFormVisible((prev) => ({ ...prev, [parentId]: false }));
     } catch (err) {
       console.error('Reply failed:', err);
@@ -134,7 +125,6 @@ const PostDetails = () => {
     }
   };
 
-  // This toggles showing or hiding the reply form for a given comment
   const toggleReplyForm = (id) => {
     setReplyFormVisible((prev) => ({ ...prev, [id]: !prev[id] }));
   };
@@ -145,35 +135,29 @@ const PostDetails = () => {
     const topLevel = comments.filter((c) => !c.parent);
     // Then I grab all replies that have a parent ID
     const replies = comments.filter((c) => c.parent);
-    // I build a map from parent comment ID to its replies
+    // Map from parent comment ID to its replies
     const replyMap = {};
     replies.forEach((r) => {
       replyMap[r.parent] = replyMap[r.parent] || [];
       replyMap[r.parent].push(r);
     });
-    // Then I return the top-level comments with their replies attached
+    // Top-level comments with their replies attached
     return topLevel.map((comment) => ({
       ...comment,
       replies: replyMap[comment._id] || [],
     }));
   };
 
-  // While loading, I just show a loading message
   if (loading) return <p className="text-center p-4">Loading...</p>;
-  // If post doesn't exist, I let the user know
   if (!post) return <p className="text-center p-4">Post not found</p>;
 
-  // I check if the logged-in user owns the post so I can show edit/delete options
   const isOwner = user && user._id === post.author._id;
 
   return (
     <div className="p-4 max-w-full md:max-w-4xl mx-auto relative">
-      {/* Post header: title, author, and options if I'm the owner */}
       <div className="flex justify-between items-start flex-wrap gap-4">
         <div className="flex-1 min-w-0">
-          {/* Show the post title with reduced font weight */}
           <h1 className="text-3xl font-semibold mb-2 break-words">{post.title}</h1>
-          {/* Show author username with a link */}
           <p className="text-gray-600 text-sm mb-4 whitespace-nowrap">
             By{' '}
             <Link
@@ -185,7 +169,7 @@ const PostDetails = () => {
           </p>
         </div>
 
-        {/* Show edit/delete options only if I own the post */}
+        {/* Show edit/delete options only if user own the post */}
         {isOwner && (
           <div className="relative">
             <button
@@ -193,7 +177,7 @@ const PostDetails = () => {
               className="text-xl hover:scale-110"
               aria-label="Post options"
             >
-              {/* Icon: three vertical dots */}
+
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -227,7 +211,7 @@ const PostDetails = () => {
         )}
       </div>
 
-      {/* Show post image if there is one */}
+      {/* Show post image */}
       {post.image && (
         <div className="my-4 w-full overflow-hidden rounded bg-gray-100">
           <img
@@ -243,24 +227,18 @@ const PostDetails = () => {
         </div>
       )}
 
-      {/* Show the post content, preserving line breaks */}
       <p className="mb-8 leading-relaxed text-gray-800 whitespace-pre-line break-words">{post.content}</p>
 
-      {/* Comments section */}
       <div className="mt-8" id="comments">
         <h2 className="text-xl font-semibold mb-4">Comments</h2>
 
-        {/* If no comments yet, show a friendly message */}
         {organizeComments().length === 0 && <p className="text-gray-500">No comments yet.</p>}
 
-        {/* Render each top-level comment with its replies */}
         {organizeComments().map((comment) => {
-          // Check if I liked this comment
           const hasLiked = user && comment.likes?.includes(user._id);
           return (
             <div key={comment._id} className="mb-4 border-b pb-2">
               <div className="flex justify-between items-center flex-wrap gap-2">
-                {/* Comment author link */}
                 <Link
                   to={`/profile/${comment.author?.username}`}
                   className="font-medium text-blue-600 hover:underline"
@@ -268,7 +246,6 @@ const PostDetails = () => {
                   @{comment.author?.username || 'Unknown'}
                 </Link>
 
-                {/* Show delete button if I wrote this comment */}
                 {user && user._id === comment.author?._id && (
                   <button
                     onClick={() => handleCommentDelete(comment._id)}
@@ -279,7 +256,6 @@ const PostDetails = () => {
                 )}
               </div>
 
-              {/* Comment text */}
               <p className="ml-1 text-gray-800 break-words">{comment.content}</p>
 
               {/* Like and reply buttons only if logged in */}
@@ -300,7 +276,6 @@ const PostDetails = () => {
                 </div>
               )}
 
-              {/* Show reply form if toggled */}
               {replyFormVisible[comment._id] && user && (
                 <form
                   onSubmit={(e) => handleReplySubmit(e, comment._id)}
@@ -330,14 +305,13 @@ const PostDetails = () => {
                 return (
                   <div key={reply._id} className="ml-6 mt-2 border-l pl-4">
                     <div className="flex justify-between items-center flex-wrap gap-2">
-                      {/* Reply author */}
                       <Link
                         to={`/profile/${reply.author?.username}`}
                         className="font-medium text-blue-600 hover:underline"
                       >
                         @{reply.author?.username || 'Unknown'}
                       </Link>
-                      {/* Delete button if I own this reply */}
+
                       {user && user._id === reply.author?._id && (
                         <button
                           onClick={() => handleCommentDelete(reply._id)}
@@ -347,9 +321,9 @@ const PostDetails = () => {
                         </button>
                       )}
                     </div>
-                    {/* Reply content */}
+                   
                     <p className="ml-1 text-gray-800 break-words">{reply.content}</p>
-                    {/* Like button for replies */}
+            
                     {user && (
                       <button
                         onClick={() => handleCommentLike(reply._id)}

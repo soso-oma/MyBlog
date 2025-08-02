@@ -2,25 +2,20 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const ForgotPassword = () => {
-  // Local state for user input and feedback message
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  // Handle form submission
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent page reload
-    setMessage(''); // Clear previous messages
-
+    e.preventDefault(); 
+    setMessage(''); 
     try {
-      // Send request to backend to trigger password reset email
+      // request to backend to trigger password reset email
       const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/forgot-password`, { email });
 
-      // Show success message returned from server
       setMessage(res.data.message || 'Password reset email sent.');
     } catch (err) {
       console.error(err);
 
-      // Show error message if request fails
       setMessage('Failed to send reset link.');
     }
   };

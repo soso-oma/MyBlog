@@ -30,13 +30,12 @@ const SearchResults = () => {
           }),
         ]);
 
-        // Set the results
         setPostResults(postData);
         setUserResults(userRes.data);
       } catch (err) {
         console.error('Search error:', err);
       } finally {
-        setLoading(false); // Turn off loading indicator
+        setLoading(false); 
       }
     };
 
@@ -45,7 +44,6 @@ const SearchResults = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-4 mt-6 space-y-6">
-      {/* Heading showing current search term */}
       <h2 className="text-xl font-semibold">
         Search Results for "<span className="text-blue-600">{query}</span>"
       </h2>
@@ -66,7 +64,6 @@ const SearchResults = () => {
                   className="block p-3 border border-gray-200 rounded hover:bg-gray-50 mb-2"
                 >
                   <div className="flex items-center gap-3">
-                    {/* User profile image or fallback */}
                     <img
                       src={user.profilePicture || '/default-avatar.png'}
                       alt="Profile"

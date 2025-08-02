@@ -4,7 +4,6 @@ import { AuthContext } from '../context/AuthContext';
 import { createPost } from '../services/postService';
 
 const NewPost = () => {
-  // Access auth token from context
   const { token } = useContext(AuthContext);
 
   // Local state for form fields
@@ -15,17 +14,15 @@ const NewPost = () => {
 
   const navigate = useNavigate();
 
-  // Form submit handler
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (!title || !content || !category) {
       alert('Please fill all required fields.');
       return;
     }
 
-    // Use FormData to handle file uploads
+    // FormData to handle file uploads
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
@@ -37,7 +34,7 @@ const NewPost = () => {
     try {
       // Send post data to backend
       await createPost(formData, token);
-      navigate('/'); // Redirect to homepage after successful post
+      navigate('/'); 
     } catch (err) {
       console.error('Failed to create post:', err);
       alert('Post creation failed');

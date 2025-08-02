@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const ResetPassword = () => {
-  // Extract the token from the route parameters
   const { token } = useParams();
 
   // State to manage new password input and success/error message
@@ -20,7 +19,6 @@ const ResetPassword = () => {
       // Make POST request to reset password with token and new password
       const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/reset-password/${token}`, { password });
 
-      // Show success message and redirect to login after a short delay
       setMessage(res.data.message || 'Password reset successfully');
       setTimeout(() => navigate('/login'), 2000);
     } catch (err) {

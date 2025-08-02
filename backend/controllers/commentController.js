@@ -2,23 +2,18 @@ import Comment from '../models/comment.js';
 import Post from '../models/Post.js';
 import Notification from '../models/notification.js';
 
-// Create a comment
 export const createComment = async (req, res) => {
   try {
     const { postId, content, parent } = req.body;
-
-    // Check if user is authenticated
     if (!req.user) return res.status(401).json({ message: 'Unauthorized: Missing user' });
-
-    // Ensure required fields are provided
     if (!postId || !content) return res.status(400).json({ message: 'Post ID and content are required' });
 
-    // Create new comment document
+    // New comment document
     const comment = new Comment({
       post: postId,
       content,
       author: req.user._id,
-      parent: parent || null, // Optional: support for threaded comments
+      parent: parent || null, 
     });
 
     await comment.save();
@@ -63,7 +58,6 @@ export const deleteComment = async (req, res) => {
     const comment = await Comment.findById(req.params.commentId);
     if (!comment) return res.status(404).json({ message: 'Comment not found' });
 
-    // Ensures only the author can delete their own comment
     if (comment.author.toString() !== req.user._id.toString()) {
       return res.status(403).json({ message: 'Not authorized to delete this comment' });
     }
@@ -83,7 +77,6 @@ export const toggleLikeComment = async (req, res) => {
 
     const userId = req.user._id;
 
-    // If user has liked the comment, remove their like; otherwise, add it
     const alreadyLiked = comment.likes.includes(userId);
 
     if (alreadyLiked) {

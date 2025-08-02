@@ -1,10 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-// Define the user schema
 const userSchema = new mongoose.Schema(
   {
-    // Unique username, required
     username: {
       type: String,
       required: [true, "Username is required"],
@@ -12,7 +10,6 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
-    // Unique email address, required and lowercased
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -21,21 +18,18 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
-    // User password (minimum 6 characters)
     password: {
       type: String,
       required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters"],
     },
 
-    // Optional profile picture URL
     profilePicture: {
       type: String,
       default: "",
       trim: true,
     },
 
-    // Optional user bio (max 300 characters)
     bio: {
       type: String,
       default: "",
@@ -43,16 +37,13 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
-    // Fields for password reset functionality
     resetPasswordToken: String,
     resetPasswordExpires: Date,
 
-    // Follow feature
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   {
-    // Automatically adds createdAt and updatedAt timestamps
     timestamps: true,
   }
 );
@@ -70,11 +61,10 @@ userSchema.pre("save", async function (next) {
   }
 });
 
-// Method to compare entered password with stored hash
+// Comparing entered password with stored hash
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-// Export the User model
 const User = mongoose.model("User", userSchema);
 export default User;

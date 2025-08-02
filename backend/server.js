@@ -16,11 +16,11 @@ dotenv.config(); // Load .env variables
 
 const app = express();
 
-// Setup __dirname for ES Modules
+// __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// CORS configuration: add all frontend URLs here
+// CORS configuration
 const allowedOrigins = [
   'http://localhost:5173',                 // local dev frontend
   'https://myblog-qokl.onrender.com'      // deployed frontend on Render
@@ -28,7 +28,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (like Postman, curl)
+    // Allow requests with no origin
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {

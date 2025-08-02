@@ -8,8 +8,7 @@ const ProtectedRoute = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Auth status
 
   useEffect(() => {
-    const token = localStorage.getItem('token'); // Check token from localStorage
-
+    const token = localStorage.getItem('token'); 
     // Determine auth status based on presence of user and token
     if (user && token) {
       setIsAuthenticated(true);
@@ -17,15 +16,14 @@ const ProtectedRoute = ({ children }) => {
       setIsAuthenticated(false);
     }
 
-    setCheckingAuth(false); //Done checking auth
-  }, [user]); //Re-run check when user changes
+    setCheckingAuth(false);
+  }, [user]); 
 
   //While checking authentication, show loading message
   if (checkingAuth) {
     return <div className="text-center p-8">Checking authentication...</div>;
   }
 
-  // If authenticated, show the protected children, If not authenticated, redirect to login page
   return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 

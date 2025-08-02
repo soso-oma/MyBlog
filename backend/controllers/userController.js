@@ -1,4 +1,3 @@
-// controllers/userController.js
 import cloudinary from '../utils/cloudinary.js';
 import fs from 'fs';
 import User from '../models/User.js';
@@ -104,7 +103,6 @@ export const unfollowUser = async (req, res) => {
   }
 };
 
-// GET user by username
 export const getUserByUsername = async (req, res) => {
   try {
     const user = await User.findOne({ username: req.params.username })

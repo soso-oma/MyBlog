@@ -4,28 +4,22 @@ import { getPostBySlug, updatePost } from '../services/postService';
 import { AuthContext } from '../context/AuthContext';
 
 const EditPost = () => {
-  // Post slug from the URL
   const { slug } = useParams();
 
-  // Auth token from context
   const { token } = useContext(AuthContext);
 
-  // React Router's navigation function
   const navigate = useNavigate();
 
-  // Local state to hold form fields, post ID, and loading status
   const [form, setForm] = useState({ title: '', content: '', category: '' });
   const [postId, setPostId] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Fetches the post data by slug when the component mounts
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const res = await getPostBySlug(slug);
         const post = res.data;
 
-        // Pre-fill the form with the post data
         setForm({
           title: post.title,
           content: post.content,
@@ -56,7 +50,6 @@ const EditPost = () => {
     try {
       const res = await updatePost(postId, form, token);
 
-      // Navigate to the updated post's detail page
       navigate(`/post/${res.data.slug}`);
     } catch (err) {
       console.error('Update failed:', err);
@@ -64,7 +57,6 @@ const EditPost = () => {
     }
   };
 
-  // Show loading message while post data is being fetched
   if (loading) return <p className="text-center">Loading post...</p>;
 
   // Render the edit form

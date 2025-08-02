@@ -6,21 +6,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 
 const Home = () => {
-  // Fetch posts and set them here
   const [posts, setPosts] = useState([]);
-  // Track which posts show full content
   const [expandedPostIds, setExpandedPostIds] = useState([]);
-  // Store comment text per post
   const [commentInputs, setCommentInputs] = useState({});
-  // Which posts show comment form
   const [visibleCommentForms, setVisibleCommentForms] = useState([]);
-  // List of IDs I follow
   const [followingIds, setFollowingIds] = useState([]);
   const { user, token } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Load posts and my following IDs
     const fetchPosts = async () => {
       try {
         const res = await getPosts();
@@ -33,12 +27,10 @@ const Home = () => {
     fetchPosts();
   }, [user?.following]);
 
-  // Update comment input for a post
   const handleCommentChange = (postId, value) => {
     setCommentInputs((prev) => ({ ...prev, [postId]: value }));
   };
 
-  // Submit comment for a post
   const handleCommentSubmit = async (e, postId) => {
     e.preventDefault();
     const text = commentInputs[postId]?.trim();
@@ -54,7 +46,6 @@ const Home = () => {
     }
   };
 
-  // Like or unlike a post
   const handleLike = async (postId) => {
     try {
       const res = await toggleLike(postId, token);
@@ -69,7 +60,6 @@ const Home = () => {
     }
   };
 
-  // Show or hide comment form
   const toggleCommentForm = (postId) => {
     setVisibleCommentForms((prev) =>
       prev.includes(postId)
@@ -78,7 +68,6 @@ const Home = () => {
     );
   };
 
-  // Follow or unfollow author
   const handleFollowToggle = async (authorId) => {
     try {
       if (followingIds.includes(authorId)) {

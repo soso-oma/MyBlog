@@ -3,11 +3,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 
-// Setup __dirname for ES modules (since __dirname is not available by default)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Ensure the /uploads folder exists (create it if it doesn't)
 const uploadPath = path.join(__dirname, '../uploads');
 if (!fs.existsSync(uploadPath)) {
   fs.mkdirSync(uploadPath);

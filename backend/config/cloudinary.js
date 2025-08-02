@@ -1,5 +1,5 @@
-import cloudinary from './cloudinaryConfig.js'; // Import configured Cloudinary instance
-import { CloudinaryStorage } from 'multer-storage-cloudinary'; // Import Cloudinary storage engine for multer
+import cloudinary from './cloudinaryConfig.js';
+import { CloudinaryStorage } from 'multer-storage-cloudinary'; 
 
 // Seting up multer storage using Cloudinary
 const storage = new CloudinaryStorage({
@@ -10,4 +10,4 @@ const storage = new CloudinaryStorage({
   },
 });
 
-export { cloudinary, storage }; // Export both for use in routes/middleware
+export { cloudinary, storage }; 

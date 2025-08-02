@@ -6,12 +6,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
 const Login = () => {
-  // Access login method from AuthContext
   const { login } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
-  // Form state for email and password
   const [form, setForm] = useState({ email: '', password: '' });
 
   // Update form fields on input change
@@ -80,17 +78,15 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Forgot password link */}
         <p className="text-sm text-center mb-4 text-gray-600">
           <Link to="/forgot-password" className="text-blue-600 hover:underline">
             Forgot your password?
           </Link>
         </p>
 
-        {/* Separator for Google login */}
+        {/* Separator for OAuth Google login */}
         <div className="text-center mb-4 text-gray-500 text-sm">or</div>
 
-        {/* Google OAuth login */}
         <div className="flex justify-center mb-2">
           <GoogleLogin
             onSuccess={handleGoogleSuccess}
