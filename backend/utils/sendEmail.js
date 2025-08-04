@@ -1,6 +1,5 @@
 import nodemailer from 'nodemailer';
 
-// Utility function to send an email
 const sendEmail = async (to, subject, html) => {
   // Configure transporter using Gmail service
   const transporter = nodemailer.createTransport({

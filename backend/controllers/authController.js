@@ -30,7 +30,7 @@ export const register = async (req, res) => {
     if (existingUser)
       return res.status(400).json({ message: 'Email already registered' });
 
-    const newUser = new User({ username, email, password }); // password hashed via pre-save
+    const newUser = new User({ username, email, password }); 
     await newUser.save();
 
     const token = generateToken(newUser._id);
@@ -110,7 +110,7 @@ export const resetPassword = async (req, res) => {
     if (!user)
       return res.status(400).json({ message: 'Invalid or expired token' });
 
-    user.password = password; // pre-save will hash
+    user.password = password;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
