@@ -12,7 +12,7 @@ import commentRoutes from './routes/comment.js';
 import userRoutes from './routes/user.js';
 import notificationRoutes from './routes/notifications.js';
 
-dotenv.config(); // Load .env variables
+dotenv.config(); 
 
 const app = express();
 
@@ -20,10 +20,10 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// CORS configuration
+// ✅ CORS configuration
 const allowedOrigins = [
-  'http://localhost:5173',                 // local dev frontend
-  'https://my-blog-oma.netlify.app/'      // deployed frontend on netlify
+  'http://localhost:5173',               // Local frontend
+  'https://my-blog-oma.netlify.app'      // Deployed frontend 
 ];
 
 app.use(cors({
@@ -32,16 +32,16 @@ app.use(cors({
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error(`Not allowed by CORS: ${origin}`));
     }
   },
-  credentials: true,
+  credentials: true, // allow cookies, authorization headers, etc.
 }));
 
 // Middleware
 app.use(express.json());
 
-// Serve uploads folder statically if you use file uploads
+// Static uploads folder 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health check endpoint
