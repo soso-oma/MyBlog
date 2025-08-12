@@ -76,7 +76,7 @@ const PostDetails = () => {
     }
   };
 
-  // I handle replies similarly, but I keep track of which comment I'm replying to
+  // This handles replies to comments
   const handleReplySubmit = async (e, parentId) => {
     e.preventDefault();
     const text = replyInputs[parentId]?.trim();
@@ -84,13 +84,9 @@ const PostDetails = () => {
     if (!text || !post?._id) return;
 
     try {
-      // Creating a comment with a parent property to nest it as a reply
       const res = await createComment({ postId: post._id, content: text, parent: parentId }, token);
-      // Adding the reply to comments state
       setComments((prev) => [...prev, res.data]);
-      // Clearing the reply input for that comment
       setReplyInputs((prev) => ({ ...prev, [parentId]: '' }));
-      // Hiding the reply form after submitting
       setReplyFormVisible((prev) => ({ ...prev, [parentId]: false }));
     } catch (err) {
       console.error('Reply failed:', err);
@@ -98,13 +94,12 @@ const PostDetails = () => {
     }
   };
 
-  // I let users delete their own comments, asking for confirmation first
   const handleCommentDelete = async (id) => {
     if (!window.confirm('Delete this comment?')) return;
 
     try {
       await deleteComment(id, token);
-      // Remove the deleted comment from my comments state
+      // Remove the deleted comment from comments state
       setComments((prev) => prev.filter((c) => c._id !== id));
     } catch (err) {
       console.error('Delete comment failed:', err);
@@ -112,7 +107,7 @@ const PostDetails = () => {
     }
   };
 
-  // When a user likes or unlikes a comment, I send the request and update state accordingly
+  // When a user likes or unlikes a comment, send request and update state accordingly
   const handleCommentLike = async (id) => {
     try {
       const res = await toggleCommentLike(id, token);
@@ -129,13 +124,10 @@ const PostDetails = () => {
     setReplyFormVisible((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Because comments come in flat, I organize them into top-level comments and their nested replies
+  //Comments organized into top-level comments and their nested replies
   const organizeComments = () => {
-    // First, I grab all comments with no parent as top-level
     const topLevel = comments.filter((c) => !c.parent);
-    // Then I grab all replies that have a parent ID
     const replies = comments.filter((c) => c.parent);
-    // Map from parent comment ID to its replies
     const replyMap = {};
     replies.forEach((r) => {
       replyMap[r.parent] = replyMap[r.parent] || [];

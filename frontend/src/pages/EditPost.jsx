@@ -59,7 +59,7 @@ const EditPost = () => {
 
   if (loading) return <p className="text-center">Loading post...</p>;
 
-  // Render the edit form
+  // Edit form
   return (
     <div className="p-4 max-w-xl mx-auto">
       <h1 className="text-2xl font-bold mb-4">Edit Post</h1>

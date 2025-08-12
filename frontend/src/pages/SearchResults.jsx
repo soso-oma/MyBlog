@@ -13,7 +13,7 @@ const SearchResults = () => {
   const [userResults, setUserResults] = useState([]);
   const [loading, setLoading] = useState(true); // Loading indicator
 
-  // Extract the search query string from the URL (e.g. /search?q=react)
+  // Search query string extracted from the URL 
   const query = new URLSearchParams(useLocation().search).get('q');
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 

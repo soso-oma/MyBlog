@@ -4,19 +4,17 @@ import axios from 'axios';
 
 const ResetPassword = () => {
   const { token } = useParams();
-
-  // State to manage new password input and success/error message
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  // Handle form submission to reset the password
+  // Form submission to reset the password
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
 
     try {
-      // Make POST request to reset password with token and new password
+      // POST request to reset password with token and new password
       const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/reset-password/${token}`, { password });
 
       setMessage(res.data.message || 'Password reset successfully');

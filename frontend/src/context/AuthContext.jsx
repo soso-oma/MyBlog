@@ -1,13 +1,9 @@
 import React, { createContext, useState, useEffect } from 'react';
-
-// Create the authentication context
 export const AuthContext = createContext();
 
-// AuthProvider component that wraps the app and provides auth state
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(null);
 
-  // Rehydrate auth from localStorage on first render
   useEffect(() => {
     const stored = localStorage.getItem('auth');
     if (stored) {
@@ -22,14 +18,14 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // Login function
+  // Login 
   const login = ({ user, token }) => {
     const authData = { user, token };
     setAuth(authData);
     localStorage.setItem('auth', JSON.stringify(authData));
   };
 
-  // Logout function
+  // Logout 
   const logout = () => {
     setAuth(null);
     localStorage.removeItem('auth');

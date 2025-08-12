@@ -30,16 +30,15 @@ const Login = () => {
     }
   };
 
-  // API base URL from environment variable
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-  // Handle Google OAuth login
+  // Google OAuth login
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       const res = await axios.post(`${API_BASE_URL}/api/auth/google-login`, {
         token: credentialResponse.credential,
       });
-      login(res.data); // Update context with Google user
+      login(res.data);
       navigate('/');
     } catch (err) {
       console.error('Google login failed', err);
@@ -84,7 +83,6 @@ const Login = () => {
           </Link>
         </p>
 
-        {/* Separator for OAuth Google login */}
         <div className="text-center mb-4 text-gray-500 text-sm">or</div>
 
         <div className="flex justify-center mb-2">
